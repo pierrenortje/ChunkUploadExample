@@ -2,6 +2,7 @@ const serverUrl = "https://localhost:7027";
 const ONE_MB = 1024 * 1024;
 
 let downloadFileName;
+let uploadedFileName;
 
 const progressBar = document.getElementById("progressBar");
 const btnUpload = document.getElementById("btnUpload");
@@ -84,6 +85,8 @@ btnUpload.addEventListener("click", (event) => {
 
   const file = fileInput.files[0];
   const uploadUrl = `${serverUrl}/api/upload`;
+
+  uploadedFileName = file.name;
   uploadFileInChunks(file, uploadUrl);
 });
 
@@ -93,6 +96,8 @@ fileInput.addEventListener("change", (event) => {
   progressBar.innerText = progressBar.style.width;
 
   downloadFileName = undefined;
+  uploadedFileName = undefined;
+  
   btnDownload.disabled = true;
   btnUpload.disabled = false;
 });
@@ -114,7 +119,7 @@ const downloadFile = async (fileName, downloadUrl) => {
     // Create an anchor element and trigger download
     const a = document.createElement("a");
     a.href = url;
-    a.download = fileName; // Set the file name
+    a.download = uploadedFileName; // Set the file name
     document.body.appendChild(a);
     a.click();
 
